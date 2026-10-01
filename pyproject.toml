@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "windytranslate"
+version = "0.1.0"
+description = "Find, license-check and run Windstorm Labs' open translation and speech models (windytranslate.com)."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [{ name = "Windstorm Labs", email = "hello@windytranslate.com" }]
+keywords = ["translation", "machine-translation", "opus-mt", "low-resource-languages", "huggingface", "speech-to-text"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Topic :: Text Processing :: Linguistic",
+  "Intended Audience :: Developers",
+]
+dependencies = []  # the catalogue client is standard library only
+
+[project.optional-dependencies]
+local = ["transformers>=4.40,<5", "sentencepiece", "sacremoses", "torch"]
+
+[project.urls]
+Homepage = "https://windytranslate.com"
+Models = "https://windytranslate.com/models"
+Licensing = "https://windytranslate.com/licensing"
+Source = "https://github.com/sneakyfree/windytranslate-python"
+
+[project.scripts]
+windytranslate = "windytranslate.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/windytranslate"]
