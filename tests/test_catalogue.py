@@ -14,6 +14,12 @@ DATA = {"models": [
      "src": "en", "tgt": "sw", "licence": "Apache-2.0", "licenceStatus": "", "attribution": "y", "library": "transformers", "score": None},
     {"id": "translate-hplt-en-sw", "repo": "WindyTranslate/translate-windy-hplt-en-sw", "task": "translation", "name": "x",
      "src": "en", "tgt": "sw", "licence": "CC-BY-4.0", "licenceStatus": "under-review", "attribution": "z", "library": "ctranslate2", "score": None},
+    {"id": "translate-en-jap", "repo": "WindyTranslate/translate-en-jap", "task": "translation", "name": "bad", "src": "en", "tgt": "ja",
+     "licence": "Apache-2.0", "licenceStatus": "matches-upstream", "attribution": "q", "library": "transformers",
+     "score": {"chrf": 99.0}, "defect": "unusable"},
+    {"id": "translate-en-de-copy", "repo": "WindyTranslate/translate-en-de-copy", "task": "translation", "name": "dup", "src": "en", "tgt": "de",
+     "licence": "CC-BY-4.0", "licenceStatus": "matches-upstream", "attribution": "q", "library": "transformers",
+     "score": {"chrf": 70.0}, "duplicateOf": "translate-en-de"},
     {"id": "listen-windy-core", "repo": "WindyWord/listen-windy-core", "task": "speech-recognition", "name": "ASR",
      "licence": "Apache-2.0", "licenceStatus": "matches-upstream", "attribution": "w"},
 ]}
@@ -39,6 +45,11 @@ class Catalogue(unittest.TestCase):
         self.assertEqual(m.page, "https://windytranslate.com/models/translate-en-de")
         flagged = wt.find("en", "sw", self.models, library="ctranslate2")
         self.assertFalse(flagged.licence_clear)
+
+    def test_defects_and_duplicates_are_never_returned(self):
+        with self.assertRaises(LookupError):
+            wt.find("en", "ja", self.models)
+        self.assertNotIn("translate-en-de-copy", [m.id for m in wt.candidates("en", "de", self.models)])
 
     def test_missing_pair_raises(self):
         with self.assertRaises(LookupError):

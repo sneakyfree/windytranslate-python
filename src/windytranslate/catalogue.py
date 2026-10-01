@@ -27,6 +27,8 @@ class Model:
     multi_target: bool = False
     subfolder: Optional[str] = None
     score: Optional[dict] = None
+    defect: Optional[str] = None
+    duplicate_of: Optional[str] = None
     raw: dict = field(default_factory=dict, repr=False, compare=False)
 
     @property
@@ -52,7 +54,7 @@ class Model:
             src_langs=tuple(m.get("srcLangs") or ([m["src"]] if m.get("src") else [])),
             tgt_langs=tuple(m.get("tgtLangs") or ([m["tgt"]] if m.get("tgt") else [])),
             multi_target=bool(m.get("multiTarget")), subfolder=m.get("subfolder"),
-            score=m.get("score") or None, raw=m,
+            score=m.get("score") or None, defect=m.get("defect"), duplicate_of=m.get("duplicateOf"), raw=m,
         )
 
 
@@ -68,11 +70,12 @@ def catalogue(url: str = MANIFEST_URL, data: Optional[dict] = None, refresh: boo
 
 
 def candidates(src: str, tgt: str, models: Optional[list] = None, library: Optional[str] = None) -> list:
-    """Translation models covering src -> tgt, best measured chrF++ first; unscored last."""
+    """Translation models covering src -> tgt, best measured chrF++ first; unscored
+    after them; known-defect models are left out, and so are duplicate copies."""
     src, tgt = src.lower(), tgt.lower()
     models = catalogue() if models is None else models
     hits = [m for m in models if m.task == "translation" and src in m.src_langs and tgt in m.tgt_langs
-            and (library is None or m.library == library)]
+            and not m.defect and not m.duplicate_of and (library is None or m.library == library)]
     return sorted(hits, key=lambda m: (m.chrf is None, -(m.chrf or 0.0), m.multi_target))
 
 
