@@ -21,6 +21,7 @@ dependencies = []  # the catalogue client is standard library only
 
 [project.optional-dependencies]
 local = ["transformers>=4.40,<5", "sentencepiece", "sacremoses", "torch"]
+test = ["pyyaml==6.0.2"]  # tests/test_ci_workflows.py parses the CI workflows
 
 [project.urls]
 Homepage = "https://windytranslate.com"
