@@ -12,11 +12,13 @@ name: Release to PyPI
 #     environment:       pypi
 #
 # To cut a release: bump `version` in pyproject.toml and src/windytranslate/__init__.py,
-# then `git tag v<version> && git push origin v<version>`.
+# `git tag v<version> && git push origin v<version>`, then a person runs this workflow BY HAND
+# on that tag (Actions > Release to PyPI > Run workflow > pick the tag). Publishing is never
+# automatic (Boss live-host rule 2026-10-28): tests/test_ci_workflows.py fails if this job
+# can run on push, tag, schedule or PR.
 
 on:
-  push:
-    tags: ['v*']
+  workflow_dispatch:
 
 permissions:
   contents: read
