@@ -77,8 +77,26 @@ class CiWorkflowsTest(unittest.TestCase):
     def test_suite_runs_on_pull_request(self):
         doc = load("test.yml")
         self.assertIn("pull_request", triggers(doc))
+        pr = triggers(doc)["pull_request"]
+        self.assertFalse(pr, f"pull_request must run on every PR, without branch or type filters: {pr}")
+        for name, job in doc["jobs"].items():
+            self.assertFalse(is_off(job.get("if")), f"test.yml job {name} is switched off")
         runs = "\n".join(s.get("run", "") for j in doc["jobs"].values() for s in j.get("steps", []))
         self.assertIn("unittest discover -s tests", runs)
+        self.assertIn('".[test]"', runs, "install the test extra, not a second pin")
+
+    def test_workflows_that_run_the_suite_install_the_test_extra(self):
+        for p in sorted(WORKFLOWS.glob("*.y*ml")):
+            steps = [s for j in (yaml.safe_load(p.read_text()).get("jobs") or {}).values() for s in j.get("steps", [])]
+            runs = [s.get("run", "") for s in steps]
+            if any("unittest discover" in r for r in runs):
+                first = next(i for i, r in enumerate(runs) if "unittest discover" in r)
+                self.assertTrue(any('".[test]"' in r for r in runs[:first]), f"{p.name} runs the tests before installing the test extra")
+
+    def test_release_refuses_unless_on_a_tag(self):
+        steps = load("release.yml")["jobs"]["publish"]["steps"]
+        self.assertIn("refs/tags/v*", steps[0].get("run", ""), "release.yml must first refuse non-tag refs")
+        self.assertIn("exit 1", steps[0].get("run", ""))
 
     def test_live_host_jobs_are_manual_or_off(self):
         for j in all_live():
