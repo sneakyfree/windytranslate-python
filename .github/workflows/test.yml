@@ -1,0 +1,23 @@
+name: test
+
+# Runs the whole unittest suite on every PR and every push to main (Boss whole-suite rule,
+# 2026-10-28). No paths / paths-ignore filter: tests/test_ci_workflows.py fails if one is added
+# or if this workflow stops running the suite on pull_request.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  unittest:
+    runs-on: [self-hosted, linux, x64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: PYTHONPATH=src python -m unittest discover -s tests -v
