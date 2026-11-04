@@ -20,11 +20,14 @@ Honest state (2026-11-04): version 0.1.0 is on PyPI (published 2026-10-01; its s
 
 ## Branches
 
-| Branch | PR | Last commit | Owner | Verdict | Why |
-|---|---|---|---|---|---|
-| ci/tests-on-every-pr | #1 (merged as ce627cb0) | c87371e1, 2026-10-28 | Windy Translate | superseded: tagged archive/ci-tests-on-every-pr-20261104 (pushed 2026-11-04); delete 2026-11-13 (owner rule: deletes after 11-13) | squash-merged; its tip equals the merged PR head (re-checked 2026-11-04) |
+Checked 2026-11-04. Besides `main`, only the branch of this open PR:
+
+| Branch | PR | Owner | Verdict | Why |
+|---|---|---|---|---|
+| docs/todo-compress-20261104 | #3 (this file) | Windy Translate | merge, then delete | open PR |
 
 ## Done (last 30 days)
 
+- 2026-11-04: ci/tests-on-every-pr (#1) DELETED after re-checking tip = merged PR head = archive tag; tag archive/ci-tests-on-every-pr-20261104 keeps the tip.
 - 2026-11-04: #2 TODO.md; archive tag pushed for ci/tests-on-every-pr.
 - 2026-10-28: #1 tests run on every PR; PyPI release is manual only and refuses unless run from a v* tag; workflow guards parse the YAML.
