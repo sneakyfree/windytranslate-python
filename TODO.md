@@ -22,8 +22,9 @@ Honest state (2026-11-04): version 0.1.0 is on PyPI (published 2026-10-01; its s
 
 | Branch | PR | Last commit | Owner | Verdict | Why |
 |---|---|---|---|---|---|
-| ci/tests-on-every-pr | #1 (merged as ce627cb0) | c87371e1, 2026-10-28 | Windy Translate | superseded: tag archive/ci-tests-on-every-pr-20261104, then delete | squash-merged; its tip equals the merged PR head (checked 2026-11-04) |
+| ci/tests-on-every-pr | #1 (merged as ce627cb0) | c87371e1, 2026-10-28 | Windy Translate | superseded: tagged archive/ci-tests-on-every-pr-20261104 (pushed 2026-11-04); delete 2026-11-13 (owner rule: deletes after 11-13) | squash-merged; its tip equals the merged PR head (re-checked 2026-11-04) |
 
 ## Done (last 30 days)
 
+- 2026-11-04: #2 TODO.md; archive tag pushed for ci/tests-on-every-pr.
 - 2026-10-28: #1 tests run on every PR; PyPI release is manual only and refuses unless run from a v* tag; workflow guards parse the YAML.
