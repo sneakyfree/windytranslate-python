@@ -36,5 +36,5 @@ ci/tests-on-every-pr (#1) is gone; its tip is kept by tag archive/ci-tests-on-ev
 ## Done (last 30 days)
 
 - [x] TODO.md re-dated · OWNER Windy Translate · ADDED 2026-11-04 · DONE 2026-11-05 · PROOF #3 840732a1
-- 2026-11-04: #2 TODO.md + CLAUDE.md line (ad8f926).
+- 2026-11-04: #2 TODO.md + CLAUDE.md line (ad8f926); ci/tests-on-every-pr (#1) deleted after re-checking tip = merged PR head = archive tag archive/ci-tests-on-every-pr-20261104.
 - 2026-10-28: #1 tests run on every PR; PyPI release is manual only and refuses unless run from a v* tag; workflow guards parse the YAML.
