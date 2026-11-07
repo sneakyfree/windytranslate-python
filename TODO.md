@@ -13,6 +13,7 @@ Honest state (2026-11-07): version 0.1.0 is on PyPI (published 2026-10-01; its s
 
 - [ ] Catch-up TODO PR merged to main (the we-are-live line, the gates, the line standard) · OWNER Windy Translate · ADDED 2026-11-06 · DUE 2026-11-07 · STATUS waiting on a reader + the owner's stamp · SOURCE this PR (#4)
 - [ ] Delete the merged branch docs/todo-compress-20261104 (#3) after checking tip = merged PR head · OWNER Windy Translate · ADDED 2026-11-07 · DUE 2026-11-08 · STATUS now · SOURCE Branches table below
+- [ ] Rename this repo windytranslate-python -> windy-translate-python (repos named like their team): first count every reference to the old name (CI lists, scripts, site links, uptime checks, docs), then rename in a planned batch with a before/after check; GitHub redirects the old URL. The PyPI package keeps the name windytranslate. · OWNER Windy Translate · ADDED 2026-11-06 · DUE 2026-11-13 (the count; renames from 2026-11-16) · STATUS now · SOURCE owner decision 2026-11-06
 
 ## Waiting on
 
