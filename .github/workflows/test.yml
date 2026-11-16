@@ -13,6 +13,9 @@ permissions:
 
 jobs:
   unittest:
+    # Self-hosted runner: run pull_request code only from a branch of THIS repo, never a fork's
+    # Pushes to main always run.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: [self-hosted, linux, x64]
     timeout-minutes: 10
     steps:
