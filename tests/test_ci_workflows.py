@@ -122,3 +122,30 @@ class CiWorkflowsTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+SAME_REPO = "github.event.pull_request.head.repo.full_name == github.repository"
+
+
+def self_hosted(job):
+    r = job.get("runs-on")
+    return "self-hosted" in (r if isinstance(r, list) else [r])
+
+
+class SelfHostedSameRepoTest(unittest.TestCase):
+    """A self-hosted job in a workflow that runs on
+    pull_request runs PR code only from this repo, never a fork's."""
+
+    def test_self_hosted_pr_jobs_carry_the_same_repo_gate(self):
+        for p in sorted(WORKFLOWS.glob("*.y*ml")):
+            doc = yaml.safe_load(p.read_text())
+            if "pull_request" not in triggers(doc) and "pull_request_target" not in triggers(doc):
+                continue
+            for name, job in (doc.get("jobs") or {}).items():
+                if self_hosted(job):
+                    self.assertIn(SAME_REPO, str(job.get("if") or ""), f"{p.name}:{name} has no same-repo gate")
+
+    def test_check_catches_a_missing_gate(self):
+        job = {"runs-on": ["self-hosted", "linux", "x64"]}
+        self.assertTrue(self_hosted(job))
+        self.assertNotIn(SAME_REPO, str(job.get("if") or ""))
