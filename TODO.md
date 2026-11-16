@@ -11,7 +11,7 @@ The owner's gates before any big marketing push, in order: (1) the owner and a f
 
 Honest state (2026-11-09): version 0.1.0 is on PyPI (published 2026-10-01; its source matches main). It lists open models from the windytranslate.com catalogue and runs them locally. No release is planned right now. Publishing is manual only (release.yml, run by hand from a v* tag).
 
-- [ ] Rename this repo windytranslate-python -> windy-translate-python (repos named like their team): first count every reference to the old name (CI lists, scripts, site links, uptime checks, docs), then rename in a planned batch with a before/after check; GitHub redirects the old URL. The PyPI package keeps the name windytranslate. · OWNER Windy Translate · ADDED 2026-11-06 · DUE 2026-11-13 (the count; renames from 2026-11-16) · STATUS now · SOURCE owner decision 2026-11-06
+- [ ] Rename this repo windytranslate-python -> windy-translate-python (repos named like their team): first count every reference to the old name (CI lists, scripts, site links, uptime checks, docs), then rename in a planned batch with a before/after check; GitHub redirects the old URL. The PyPI package keeps the name windytranslate. · OWNER Windy Translate · ADDED 2026-11-06 · DUE 2026-11-16 (18:00Z) (the count; renames from 2026-11-17) · STATUS waiting on the shared count · SOURCE owner decision 2026-11-06
 
 ## Waiting on
 
