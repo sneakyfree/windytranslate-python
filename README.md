@@ -1,8 +1,8 @@
 # windytranslate
 
 Find, license-check and run [Windstorm Labs](https://windstormlabs.com)' open
-translation and speech models: 1,660 translation pair models, 3 multilingual
-models and 66 speech-to-text models, each with its measured score, licence
+translation and speech models: 1,575 translation pair models, 3 multilingual
+models and 61 speech-to-text models, each with its measured score, licence
 and attribution. Catalogue: **[windytranslate.com](https://windytranslate.com)**.
 
 ```bash
