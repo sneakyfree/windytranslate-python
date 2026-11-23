@@ -11,6 +11,10 @@ name: Release to PyPI
 #     workflow:          release.yml
 #     environment:       pypi
 #
+# RUNNER (Windy Boss 2026-11-23T13:54:52Z, option (a)): this repo has NO standing runner. Before the manual
+# run, ask Windy Git on the BOARD; it runs tools/pypi-release-runner.sh <tag> on Veron, which registers ONE
+# --ephemeral self-hosted runner for that single job and removes it after (or after 45 min). Nothing paid.
+#
 # To cut a release: bump `version` in pyproject.toml and src/windytranslate/__init__.py,
 # `git tag v<version> && git push origin v<version>`, then a person runs this workflow BY HAND
 # on that tag (Actions > Release to PyPI > Run workflow > pick the tag). Publishing is never
