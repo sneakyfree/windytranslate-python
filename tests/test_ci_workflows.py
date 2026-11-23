@@ -89,6 +89,9 @@ class CiWorkflowsTest(unittest.TestCase):
         self.assertTrue((GITHUB / "release.yml").is_file(), "release.yml needs GitHub OIDC for PyPI")
         self.assertEqual(len({p.name for p in workflow_files()}), len(workflow_files()), "one name, one file")
 
+    def test_release_runs_only_on_the_release_runner_label(self):
+        self.assertEqual(load("release.yml")["jobs"]["publish"]["runs-on"], ["self-hosted", "veron-release"])
+
     def test_parser_sees_flow_form(self):
         doc = yaml.safe_load("on: { pull_request: { paths: ['src/**'] } }")
         self.assertIn("paths", triggers(doc)["pull_request"])

@@ -29,8 +29,9 @@ permissions:
 
 jobs:
   publish:
-    # Self-hosted: GitHub-hosted runners are unavailable on this account.
-    runs-on: [self-hosted, linux, x64]
+    # Self-hosted: GitHub-hosted runners are unavailable on this account. Label veron-release: only the
+    # ephemeral runner from Windy Git's tools/pypi-release-runner.sh carries it, so nothing else lands there.
+    runs-on: [self-hosted, veron-release]
     environment: pypi
     permissions:
       id-token: write
