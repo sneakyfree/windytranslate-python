@@ -9,7 +9,19 @@ import unittest
 
 import yaml
 
-WORKFLOWS = pathlib.Path(__file__).resolve().parent.parent / ".github" / "workflows"
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+# CI runs on the forge (Windy Git) since the GitHub runner went (Boss RULING 2026-11-22T18:01:52Z):
+# test.yml lives in .gitea/workflows. release.yml stays in .github/workflows: PyPI Trusted
+# Publishing needs a GitHub OIDC token. Both directories are read.
+GITEA = ROOT / ".gitea" / "workflows"
+GITHUB = ROOT / ".github" / "workflows"
+WORKFLOW_DIRS = (GITEA, GITHUB)
+
+
+def workflow_files():
+    return sorted((p for d in WORKFLOW_DIRS for p in d.glob("*.y*ml")), key=lambda p: p.name)
+
+
 EXCEPTIONS = {}  # {"file.yml": "reason"}
 
 # Live-host jobs rule (Boss, 2026-10-28 07:36Z): a job that can reach a live host or publish a
@@ -42,7 +54,7 @@ def live_jobs(doc):
 
 
 def all_live():
-    return [dict(j, id=f"{p.name}:{j['job']}") for p in sorted(WORKFLOWS.glob("*.y*ml"))
+    return [dict(j, id=f"{p.name}:{j['job']}") for p in workflow_files()
             for j in live_jobs(yaml.safe_load(p.read_text()))]
 
 
@@ -56,12 +68,13 @@ def triggers(doc):
 
 
 def load(name):
-    return yaml.safe_load((WORKFLOWS / name).read_text())
+    (path,) = [p for p in workflow_files() if p.name == name]
+    return yaml.safe_load(path.read_text())
 
 
 class CiWorkflowsTest(unittest.TestCase):
     def test_no_path_filters(self):
-        files = sorted(p.name for p in WORKFLOWS.glob("*.y*ml"))
+        files = [p.name for p in workflow_files()]
         self.assertTrue(files, "no workflow files found")
         for f in files:
             if f in EXCEPTIONS:
@@ -69,6 +82,12 @@ class CiWorkflowsTest(unittest.TestCase):
             filtered = [t for t, cfg in triggers(load(f)).items()
                         if isinstance(cfg, dict) and ("paths" in cfg or "paths-ignore" in cfg)]
             self.assertEqual(filtered, [], f"{f} filters {filtered} by path")
+
+    def test_suite_runs_on_the_forge_and_release_stays_on_github(self):
+        self.assertTrue((GITEA / "test.yml").is_file(), "test.yml runs on the forge: .gitea/workflows")
+        self.assertFalse((GITHUB / "test.yml").exists(), "no GitHub runner takes test.yml any more")
+        self.assertTrue((GITHUB / "release.yml").is_file(), "release.yml needs GitHub OIDC for PyPI")
+        self.assertEqual(len({p.name for p in workflow_files()}), len(workflow_files()), "one name, one file")
 
     def test_parser_sees_flow_form(self):
         doc = yaml.safe_load("on: { pull_request: { paths: ['src/**'] } }")
@@ -86,7 +105,7 @@ class CiWorkflowsTest(unittest.TestCase):
         self.assertIn('".[test]"', runs, "install the test extra, not a second pin")
 
     def test_workflows_that_run_the_suite_install_the_test_extra(self):
-        for p in sorted(WORKFLOWS.glob("*.y*ml")):
+        for p in workflow_files():
             steps = [s for j in (yaml.safe_load(p.read_text()).get("jobs") or {}).values() for s in j.get("steps", [])]
             runs = [s.get("run", "") for s in steps]
             if any("unittest discover" in r for r in runs):
@@ -137,7 +156,7 @@ class SelfHostedSameRepoTest(unittest.TestCase):
     pull_request runs PR code only from this repo, never a fork's."""
 
     def test_self_hosted_pr_jobs_carry_the_same_repo_gate(self):
-        for p in sorted(WORKFLOWS.glob("*.y*ml")):
+        for p in workflow_files():
             doc = yaml.safe_load(p.read_text())
             if "pull_request" not in triggers(doc) and "pull_request_target" not in triggers(doc):
                 continue
